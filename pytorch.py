@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
 from torch.optim import Adam
-from torchvision.datasets import CIFAR10
-from utils import get_train_x_y, to_categorical
+from utils import get_train_x_y
 from sklearn.model_selection import train_test_split
 
 epochs = 15
@@ -79,12 +78,11 @@ opt = Adam(classifier.parameters(), lr=learn_rate)
 
 x_data, y_data = get_train_x_y('./data')
 x_data = x_data / 255.0
-# x_data = x_data[:400]
-# y_data = y_data[:400]
+#x_data = x_data[:200]
+#y_data = y_data[:200]
 y_data = [tiles[i] for i in y_data]
 
 train_X, test_X, train_Y, test_Y = train_test_split(x_data, y_data, test_size=0.2)
-print(to_categorical(train_Y, num_classes)[0])
 
 train_data = DuckieRoadDataset(
     X = train_X,
@@ -137,6 +135,8 @@ for epoch in range(epochs):
     classifier.eval()
     test_loss = 0.0
     test_acc = 0.0
+    correct = 0.0
+    total = 0.0
     for idx, (X,Y) in enumerate(test_loader):
 
         model_output = classifier.forward(X)
@@ -145,20 +145,22 @@ for epoch in range(epochs):
 
         test_loss += loss_output.cpu().item() * X.size(0)
 
-        test_acc += (model_output.argmax(dim=1) == Y).float().mean()
+        correct += (model_output.argmax(dim=1) == Y).sum().item()
+        total += Y.size(0)
+       # test_acc += (model_output.argmax(dim=1) == Y).float().mean()
 
     # for tracking history
-    test_loss = test_loss / 10000
-    train_loss = train_loss / 50000
-    test_acc = test_acc * batch_size / 10000
-    train_acc = train_acc * batch_size / 50000
+    test_loss = test_loss / test_X.__len__()
+    train_loss = train_loss / train_X.__len__()
+ #   test_acc = test_acc * batch_size / test_X.__len__()
+    train_acc = train_acc * batch_size / train_X.__len__()
     history_train_loss.append(train_loss)
     history_test_loss.append(test_loss)
     history_train_acc.append(train_acc)
-    history_test_acc.append(test_acc)
+    history_test_acc.append(correct/total)
 
     print(f'Epoch: {epoch}, loss: {train_loss:.5f}, val_loss: {test_loss:.5f}')
-    print(f'                acc: {train_acc:.5f}, val_acc: {test_acc:.5f}')
+    print(f'                val_acc: {correct/total:.5f}')
 
 plt.figure(1, figsize=(10, 10))
 plt.title("Loss")
