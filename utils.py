@@ -62,12 +62,13 @@ def download_from_gdocs(url, filename):
 
 
 def augmentation(img_mas):
-    rotate = A.ShiftScaleRotate(p=0.5)
-    scale = A.ShiftScaleRotate(shift_limit=0, scale_limit=0.9, rotate_limit=0, p=1)
+    res = img_mas.copy()
+    rotate = A.augmentations.transforms.Rotate(limit=30, p=1)
+    el_t = A.augmentations.transforms.ElasticTransform(alpha=10, sigma=20, alpha_affine=50,p=1)
     for img in img_mas:
-        img_mas.append(scale(image=img)['image'])
-        img_mas.append(rotate(image=img)['image'])
-    return img_mas
+        res.append(rotate(image=img)['image'])
+        res.append(el_t(image=img)['image'])
+    return res
 
 
 def jpeg_from_mp4(path, destination, frame_ind = 1):
@@ -90,7 +91,8 @@ def jpeg_from_mp4(path, destination, frame_ind = 1):
             if currentframe % frame_ind == 0:
                 name = './data/frame' + str(frame_id) + '.jpg'
                 print('Creating...' + name)
-                cv2.imwrite(name, frame)
+                new_frame = preproc(frame)
+                cv2.imwrite(name, new_frame)
                 frame_id += 1
             currentframe += 1
         else:
@@ -98,3 +100,11 @@ def jpeg_from_mp4(path, destination, frame_ind = 1):
 
     # Release all space and windows once done
     cam.release()
+
+
+def preproc(src_img):
+    img = src_img.copy()
+    img = cv2.medianBlur(img, 5)
+    #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    canny = cv2.Canny(img,100,200)
+    return canny
