@@ -47,27 +47,47 @@ class RoadNet(nn.Module):
     def __init__(self):
         super(RoadNet, self).__init__()
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, padding=1)
         self.relu1 = nn.ReLU()
-    #    self.pool1 = nn.MaxPool2d(kernel_size=2)
+        self.batn1 = nn.BatchNorm2d(8)
+        self.pool1 = nn.MaxPool2d(kernel_size=2)
+        self.drop1 = nn.Dropout(p=0.2)
 
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=64, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1)
         self.relu2 = nn.ReLU()
-        self.batn2 = nn.BatchNorm2d(64)
+        self.batn2 = nn.BatchNorm2d(16)
+        self.pool2 = nn.MaxPool2d(kernel_size=2)
+        self.drop2 = nn.Dropout(p=0.2)
 
-        self.fc = nn.Linear(in_features=224 * 224 * 64, out_features=6)
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
+        self.relu3 = nn.ReLU()
+        self.batn3 = nn.BatchNorm2d(32)
+        self.pool3 = nn.MaxPool2d(kernel_size=2)
+        self.drop3 = nn.Dropout(p=0.2)
+
+        self.fc = nn.Linear(in_features=28 * 28 * 32, out_features=6)
 
     def forward(self, input):
       #  print(input.shape)
         output = self.conv1(input.float())
         output = self.relu1(output)
-       # output = self.pool1(output)
+        output = self.batn1(output)
+        output = self.pool1(output)
+        output = self.drop1(output)
 
         output = self.conv2(output)
         output = self.relu2(output)
         output = self.batn2(output)
+        output = self.pool2(output)
+        output = self.drop2(output)
 
-        output = output.view(-1, 224 * 224 * 64)
+        output = self.conv3(output)
+        output = self.relu3(output)
+        output = self.batn3(output)
+        output = self.pool3(output)
+        output = self.drop3(output)
+
+        output = output.view(-1, 28 * 28 * 32)
         output = self.fc(output)
 
         return output
@@ -78,8 +98,8 @@ opt = Adam(classifier.parameters(), lr=learn_rate)
 
 x_data, y_data = get_train_x_y('./data')
 x_data = x_data / 255.0
-#x_data = x_data[:200]
-#y_data = y_data[:200]
+#x_data = x_data[:250]
+#y_data = y_data[:250]
 y_data = [tiles[i] for i in y_data]
 
 train_X, test_X, train_Y, test_Y = train_test_split(x_data, y_data, test_size=0.2)
@@ -166,6 +186,14 @@ plt.figure(1, figsize=(10, 10))
 plt.title("Loss")
 plt.plot(history_test_loss, 'r', label='test')
 plt.plot(history_train_loss, 'b', label='train')
+plt.legend()
+plt.show()
+plt.clf()
+
+plt.figure(1, figsize=(10, 10))
+plt.title("Loss")
+plt.plot(history_test_acc, 'r', label='test')
+plt.plot(history_train_acc, 'b', label='train')
 plt.legend()
 plt.show()
 plt.clf()
