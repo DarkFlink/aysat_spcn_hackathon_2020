@@ -42,7 +42,7 @@ def press(event):
 def markup_dataset(dir='./data/'):
     list = os.listdir(dir)
     # sort files names in list
-    list.sort()
+    list.sort(key=lambda x: int(x.split('_')[1]))
     for f in list:
         img_format = os.path.splitext(f)[1]
         fig = plt.figure(figsize=(12, 9))
@@ -50,6 +50,7 @@ def markup_dataset(dir='./data/'):
         ax = fig.subplots()
         global filename
         filename = dir + f
+        print(filename)
         img = mpimg.imread(filename)
         ax.imshow(img)
         plt.text(10, 25, "1 - Right rot", fontsize=12, bbox=dict(facecolor='red', alpha=0.7))
