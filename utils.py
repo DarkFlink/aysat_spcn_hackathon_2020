@@ -89,7 +89,7 @@ def jpeg_from_mp4(path, destination, frame_ind = 1):
 
         if ret:
             if currentframe % frame_ind == 0:
-                name = './data/frame' + str(frame_id) + '.jpg'
+                name = f'./{destination}/frame' + str(frame_id) + '.jpg'
                 print('Creating...' + name)
                 new_frame = preproc(frame)
                 cv2.imwrite(name, new_frame)
