@@ -1,10 +1,13 @@
-from urllib import request
 from urllib.request import urlopen
-import requests
+from os.path import isfile, join
+from urllib import request
 import albumentations as A
+from os import listdir
 import numpy as np
-import os
+import requests
+import json
 import cv2
+import os
 
 def download(url, name): # doesn't work for gdocs
     if os.path.isfile('./' + name):
@@ -138,3 +141,22 @@ def load_images_from_path(imgs_with_paths):
 def process_video(url, path, skip_rate=9, filename='data.mp4'):
     download(url, filename)
     jpeg_from_mp4(filename, path, skip_rate)
+
+
+
+def get_train_x_y(_dir_path='./data'):
+    x_data, y_data = [], []
+    for dir_name in listdir(_dir_path):
+        dir_path = f'{_dir_path}/{dir_name}'
+        onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f)) and '.json' in f]
+        for filename in onlyfiles:
+            print(f'{_dir_path}/{dir_name}/{filename}')
+            with open(f'{_dir_path}/{dir_name}/{filename}') as file:
+                data_json = json.load(file)
+            for element in data_json:
+                print(element)
+                key = list(element.keys())[0]
+                label = element[key]
+                y_data.append(label)
+                x_data.append(load_images_from_path([key])[0])
+    return x_data, y_data

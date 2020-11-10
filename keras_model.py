@@ -6,6 +6,8 @@ from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 import cv2, numpy as np
 import matplotlib.pyplot as plt
+import os
+from os.path import isfile, join
 
 def VGG_16(weights_path=None):
     model = Sequential()
@@ -57,6 +59,10 @@ def VGG_16(weights_path=None):
 
     return model
 
+def datasets_info(dir_path='./data'):
+    print(l)
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f)) and '.json' in f] 
+
 if __name__ == "__main__":
     im = cv2.resize(cv2.imread(' '), (224, 224)).astype(np.float32)
 
@@ -64,6 +70,7 @@ if __name__ == "__main__":
                                    save_best_only=True, save_weights_only=True)
 
     model = VGG_16()
+
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
