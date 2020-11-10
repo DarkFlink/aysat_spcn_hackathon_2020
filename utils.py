@@ -1,9 +1,11 @@
 from urllib import request
 from urllib.request import urlopen
-import os
 import requests
 import albumentations as A
 import numpy as np
+import os
+import cv2
+
 def download(url, name): # doesn't work for gdocs
     if os.path.isfile('./' + name):
         return
@@ -66,3 +68,33 @@ def augmentation(img_mas):
         img_mas.append(scale(image=img)['image'])
         img_mas.append(rotate(image=img)['image'])
     return img_mas
+
+
+def jpeg_from_mp4(path, destination, frame_ind = 1):
+    cam = cv2.VideoCapture(path)
+    try:
+        # creating a folder named data
+        if not os.path.exists(destination):
+            os.makedirs(destination)
+        # if not created then raise error
+    except OSError:
+        print('Error: Creating directory of data')
+    # frame
+    currentframe = 0
+    frame_id = 0
+    while (True):
+        # reading from frame
+        ret, frame = cam.read()
+
+        if ret:
+            if currentframe % frame_ind == 0:
+                name = './data/frame' + str(frame_id) + '.jpg'
+                print('Creating...' + name)
+                cv2.imwrite(name, frame)
+                frame_id += 1
+            currentframe += 1
+        else:
+            break
+
+    # Release all space and windows once done
+    cam.release()

@@ -1,13 +1,8 @@
-from utils import download_from_gdocs
-from zipfile import ZipFile
-import os
+from utils import download, jpeg_from_mp4
 
-url = 'https://drive.google.com/u/0/uc?export=download&confirm=DCwi&id=1aIBD_eoIVcCVl8bjXt-oi6A4s-e-m5a4'
-filename = 'dec7.zip'
+url = 'http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160430182226_quackmob.video.mp4'
+filename = 'data.mp4'
 
-download_from_gdocs(url, filename)
+download(url, filename)
 
-with ZipFile(filename, 'r') as zipObj:
-    path_name = './data'
-    os.mkdir(path_name)
-    zipObj.extractall(path_name)
+jpeg_from_mp4(filename, 'data', 9)
