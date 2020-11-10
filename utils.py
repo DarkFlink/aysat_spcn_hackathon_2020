@@ -9,6 +9,7 @@ import requests
 import json
 import cv2
 import os
+import glob
 
 def download(url, name): # doesn't work for gdocs
     if os.path.isfile('./' + name):
@@ -162,3 +163,17 @@ def get_train_x_y(_dir_path='./data'):
              #   x_data.append(np.asarray(img))
                 x_data.append(np.asarray(load_images_from_path([key])[0]))
     return np.asarray(x_data), np.asarray(y_data)
+
+def get_avi(input_dir, output_file):
+    img_array = []
+    for filename in glob.glob(input_dir):
+        img = cv2.imread(filename)
+        height, width, layers = img.shape
+        size = (width, height)
+        img_array.append(img)
+
+    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 5, size)
+
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
