@@ -1,0 +1,4 @@
+numpy==1.18.5
+Pillow==7.1.2
+requests==2.23.0
+albumentations==0.5.1
