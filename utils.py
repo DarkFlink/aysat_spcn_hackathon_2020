@@ -133,3 +133,8 @@ def load_images_from_path(imgs_with_paths):
     for img in imgs_with_paths:
         images.append(cv2.imread(img))
     return images
+
+
+def process_video(url, path, skip_rate=9, filename='data.mp4'):
+    download(url, filename)
+    jpeg_from_mp4(filename, path, skip_rate)
