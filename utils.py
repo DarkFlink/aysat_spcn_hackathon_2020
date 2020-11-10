@@ -2,6 +2,7 @@ from urllib.request import urlopen
 from os.path import isfile, join
 from urllib import request
 import albumentations as A
+import PIL.Image
 from os import listdir
 import numpy as np
 import requests
@@ -134,7 +135,8 @@ def load_images_from_path(imgs_with_paths):
     images = []
     print(imgs_with_paths)
     for img in imgs_with_paths:
-        images.append(cv2.imread(img))
+        img = cv2.imread(img)
+        images.append(cv2.resize(img, (224, 224)))
     return images
 
 
@@ -150,13 +152,13 @@ def get_train_x_y(_dir_path='./data'):
         dir_path = f'{_dir_path}/{dir_name}'
         onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f)) and '.json' in f]
         for filename in onlyfiles:
-            print(f'{_dir_path}/{dir_name}/{filename}')
             with open(f'{_dir_path}/{dir_name}/{filename}') as file:
                 data_json = json.load(file)
             for element in data_json:
-                print(element)
                 key = list(element.keys())[0]
                 label = element[key]
                 y_data.append(label)
-                x_data.append(load_images_from_path([key])[0])
-    return x_data, y_data
+             #   img = PIL.Image.open(key)
+             #   x_data.append(np.asarray(img))
+                x_data.append(np.asarray(load_images_from_path([key])[0]))
+    return np.asarray(x_data), np.asarray(y_data)

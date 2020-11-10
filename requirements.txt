@@ -4,4 +4,5 @@ requests==2.23.0
 albumentations==0.5.1
 matplotlib==3.3.2
 keras==2.4.3
-sklearn==0.23.2
+sklearn
+tensorflow==2.2
