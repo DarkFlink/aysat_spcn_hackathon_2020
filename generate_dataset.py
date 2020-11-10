@@ -1,5 +1,4 @@
 from utils import process_video
-import sys
 
 
 process_video(url='http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160430182226_quackmob.video.mp4', path=f'data/video1', filename='data1.mp4')
