@@ -162,3 +162,7 @@ def get_train_x_y(_dir_path='./data'):
              #   x_data.append(np.asarray(img))
                 x_data.append(np.asarray(load_images_from_path([key])[0]))
     return np.asarray(x_data), np.asarray(y_data)
+
+def to_categorical(y, num_classes):
+    """ 1-hot encodes a tensor """
+    return np.eye(num_classes, dtype='uint8')[y]
