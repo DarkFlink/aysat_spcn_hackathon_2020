@@ -124,7 +124,7 @@ def load_images(path = './data'):
             for form in valid_images:
                 if form in file:
                     images_paths.append(address + '/' + file)
-    load_images_from_path(images_paths)
+    return load_images_from_path(images_paths)
 
 
 def load_images_from_path(imgs_with_paths):
@@ -132,3 +132,4 @@ def load_images_from_path(imgs_with_paths):
     print(imgs_with_paths)
     for img in imgs_with_paths:
         images.append(cv2.imread(img))
+    return images
