@@ -10,7 +10,7 @@ import json
 import cv2
 import os
 import glob
-
+tiles = {0:"right", 1:"left", 2:"straight", 3:"three_cross", 4:"four_cross", 5:"empty"}
 def download(url, name): # doesn't work for gdocs
     if os.path.isfile('./' + name):
         return
@@ -164,15 +164,21 @@ def get_train_x_y(_dir_path='./data'):
                 x_data.append(np.asarray(load_images_from_path([key])[0]))
     return np.asarray(x_data), np.asarray(y_data)
 
+
+def get_class(number):
+    return tiles[number]
+
+
 def get_avi(input_dir, output_file):
     img_array = []
     for filename in glob.glob(input_dir):
         img = cv2.imread(filename)
+        cv2.putText(img, get_class(3), (100, 25), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2, cv2.LINE_AA)
         height, width, layers = img.shape
         size = (width, height)
         img_array.append(img)
 
-    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 5, size)
+    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 2, size)
 
     for i in range(len(img_array)):
         out.write(img_array[i])
