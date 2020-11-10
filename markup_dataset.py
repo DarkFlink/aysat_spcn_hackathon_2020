@@ -45,7 +45,7 @@ def markup_dataset(dir='./data/'):
     list.sort()
     for f in list:
         img_format = os.path.splitext(f)[1]
-        fig = plt.figure()
+        fig = plt.figure(figsize=(12, 9))
         fig.canvas.mpl_connect('key_press_event', press)
         ax = fig.subplots()
         global filename
