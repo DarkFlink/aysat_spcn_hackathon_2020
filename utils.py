@@ -108,3 +108,27 @@ def preproc(src_img):
     #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     canny = cv2.Canny(img,100,200)
     return canny
+
+
+def load_images(path = './data'):
+    images_paths = []
+    dir_tree = os.walk(path)
+    folder = []
+    valid_images = [".jpg", ".png", ".jpeg"]
+    for el in dir_tree:
+        if el[0] is path:
+            continue
+        folder.append(el)
+    for address, dirs, files in folder:
+        for file in files:
+            for form in valid_images:
+                if form in file:
+                    images_paths.append(address + '/' + file)
+    load_images_from_path(images_paths)
+
+
+def load_images_from_path(imgs_with_paths):
+    images = []
+    print(imgs_with_paths)
+    for img in imgs_with_paths:
+        images.append(cv2.imread(img))
