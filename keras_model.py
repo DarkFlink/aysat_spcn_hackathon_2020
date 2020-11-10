@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 import cv2, numpy as np
 import matplotlib.pyplot as plt
 import os
+from utils import get_train_x_y
 from os.path import isfile, join
 
 def VGG_16(weights_path=None):
@@ -64,19 +65,22 @@ def datasets_info(dir_path='./data'):
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f)) and '.json' in f] 
 
 if __name__ == "__main__":
-    im = cv2.resize(cv2.imread(' '), (224, 224)).astype(np.float32)
+    im = cv2.resize(cv2.imread('/home/andrey/hacaton/orig_2019-12-07-15-24-05/1575732276.099659919.jpg'), (224, 224)).astype(np.float32)
 
     weight_saver = ModelCheckpoint('duckietown.h5', monitor='val_accuracy',
                                    save_best_only=True, save_weights_only=True)
 
     model = VGG_16()
 
+    x_data, y_data = get_train_x_y('./data')
+
+    train_images, train_labels, val_images, val_labels = train_test_split(x_data, y_data, test_size = 0.2)
+
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
-    hist = model.fit(steps_per_epoch=,
-                               validation_data=(x_val, y_val),
-                               epochs=, verbose=2,
+    hist = model.fit(train_images, train_labels, validation_data=(val_images, val_labels),
+                               epochs=10, verbose=2,
                                callbacks=[weight_saver])
     model.load_weights('duckietown.h5')
 
