@@ -1,7 +1,8 @@
 from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout
+from keras.layers import Conv2D, MaxPool2D, Flatten, Dense, BatchNormalization
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD
+from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 import cv2, numpy as np
@@ -21,11 +22,31 @@ if __name__ == "__main__":
     weight_saver = ModelCheckpoint('duckietown.h5', monitor='val_accuracy',
                                    save_best_only=True, save_weights_only=True)
 
-    model = Xception(classes=6, weights=None)
+    model = model = Sequential([
+    Conv2D(filters=8, kernel_size=(3, 3), strides=(1, 1), activation='relu'),
+    BatchNormalization(),
+    MaxPool2D(pool_size=2),
+
+    Conv2D(filters=16, kernel_size=(3, 3), strides=(1, 1), activation='relu'),
+    BatchNormalization(),
+    MaxPool2D(pool_size=2),
+
+    Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation='relu'),
+    BatchNormalization(),
+    MaxPool2D(pool_size=2),
+
+    Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu'),
+    BatchNormalization(),
+    MaxPool2D(pool_size=2),
+
+    Flatten(),
+    Dense(units=6, activation='softmax'),
+])
 
     x_data, y_data = get_train_x_y('./data')
-    x_data = x_data[:200]
-    y_data = y_data[:200]
+   # x_data = x_data[:400]
+    x_data = x_data / 255.0
+   # y_data = y_data[:400]
     y_data = [tiles[i] for i in y_data]
 
     y_data = to_categorical(y_data, 6)
@@ -38,11 +59,11 @@ if __name__ == "__main__":
     print(train_X.shape)
     print(train_Y.shape)
 
-    sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = Adam()
 
     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
     hist = model.fit(train_X, train_Y, validation_data=(test_X, test_Y),
-                               epochs=10, verbose=1,
+                               epochs=15, verbose=1, batch_size=24,
                                callbacks=[weight_saver])
     model.load_weights('duckietown.h5')
 
