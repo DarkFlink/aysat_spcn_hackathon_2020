@@ -2,6 +2,18 @@
 
 ## Run
 
+
+
+
+## Additional
+
+### Generate dataset
+
+Launch:
+```
+python3 generate_dataset.py 
+```
+
 ### Classification markup
 
 Launch:
