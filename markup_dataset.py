@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 parser = ArgumentParser()
 parser.add_argument("-p", "--dir_path", type=str,
                    help="path to dir with input images")
-parser.add_argument("-o", "--output", type=str,
+parser.add_argument("-o", "--output", type=str, default='markup.json',
                    help="JSON output filename")
 args = vars(parser.parse_args())
 
@@ -65,5 +65,5 @@ def markup_dataset(dir='./data/'):
 
 
 res = markup_dataset(args['dir_path'])
-with open(args['output'], "w") as outfile:
+with open(args['dir_path'] + args['output'], "w") as outfile:
     json.dump(markup, outfile)
