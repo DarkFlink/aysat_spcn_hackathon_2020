@@ -1,9 +1,7 @@
-from utils import download, jpeg_from_mp4
+from utils import process_video
 import sys
 
-url = 'http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160430182226_quackmob.video.mp4'
-filename = 'data.mp4'
 
-download(url, filename)
-
-jpeg_from_mp4(filename, f'data/{sys.argv[1]}', 9)
+process_video(url='http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160430182226_quackmob.video.mp4', path=f'data/video1', filename='data1.mp4')
+process_video(url='http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160512194050_morty.video.mp4', path=f'data/video2', skip_rate=18, filename='data2.mp4')
+process_video(url='http://ipfs.duckietown.org:8080/ipfs/QmUbtwQ3QZKmmz5qTjKM3z8LJjsrKBWLUnnzoE5L4M7y7J/logs/20160429225147_neptunus.video.mp4', path=f'data/video3', skip_rate=5, filename='data3.mp4')
