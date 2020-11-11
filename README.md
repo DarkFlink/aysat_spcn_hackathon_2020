@@ -26,6 +26,10 @@ Algorithm working on video from duckietown server: https://youtu.be/Ve79IPrYC6c
 
 Model makes base prediction -- next tile class. Also, we print second-prioritized predicted class, cause our dataset not balanced && trained mostly on "straight line" tiles. 
 
+![](./demo/demo_marked.gif)
+
+![](./demo/demo1.gif)
+
 ## Run
 
 Craete python venv, install requirements && download demo videos:
