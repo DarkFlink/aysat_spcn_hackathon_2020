@@ -71,4 +71,4 @@ def get_avi(path_to_video, output_file,save_gray= False, cpu = False):
     out.release()
 
 
-get_avi(args['input_path'], args['output_path'], args['canny'])
+get_avi(args['input_path'], args['output_path'], args['canny'], args['cpu'])
