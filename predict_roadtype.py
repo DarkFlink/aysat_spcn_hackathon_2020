@@ -64,7 +64,7 @@ def get_avi(path_to_video, output_file,save_gray= False, cpu = False):
 
     cap.release()
     height, width, layers = result_frame_array[0].shape
-    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))
+    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 30, (width,height))
     for i in result_frame_array:
         out.write(i)
     out.release()
