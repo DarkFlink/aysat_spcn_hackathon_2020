@@ -16,7 +16,7 @@ def download(url, name): # doesn't work for gdocs
         return
 
     # download file
-    dir = './'
+    dir = '../'
     filename = os.path.join(dir, name)
     if not os.path.isfile(filename):
         response = urlopen(url)

@@ -1,5 +1,4 @@
 from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Dropout
 from keras.layers import Conv2D, MaxPool2D, Flatten, Dense, BatchNormalization
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import Adam
@@ -10,7 +9,7 @@ import matplotlib.pyplot as plt
 from keras.applications import Xception
 from keras.utils import to_categorical
 import os
-from utils import get_train_x_y
+from src.utils import get_train_x_y
 from os.path import isfile, join
 import enum
 
@@ -43,7 +42,7 @@ if __name__ == "__main__":
     Dense(units=6, activation='softmax'),
 ])
 
-    x_data, y_data = get_train_x_y('./data')
+    x_data, y_data = get_train_x_y('../data')
    # x_data = x_data[:400]
     x_data = x_data / 255.0
    # y_data = y_data[:400]
