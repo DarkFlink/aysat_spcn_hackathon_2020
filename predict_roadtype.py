@@ -14,11 +14,12 @@ parser.add_argument("-i", "--input_path", type=str,
                    help="path to dir with input video")
 parser.add_argument("-o", "--output_path", type=str, default='./out.mp4',
                    help="video output filename")
-parser.add_argument("--gpu", default="False",
-                   help="cpu or gpu prediction", action='store_true')
+parser.add_argument("--cpu", default="False",
+                   help="strictly launch cpu prediction", action='store_true')
 parser.add_argument("--canny", default="False",
-                   help="cpu or gpu prediction", action='store_true')
+                   help="canny for demo-video", action='store_true')
 args = vars(parser.parse_args())
+
 
 def load_model(cpu):
     if cpu:
