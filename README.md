@@ -24,7 +24,7 @@ Road types explained here: https://docs.duckietown.org/DT19/opmanual_duckietown/
 
 Algorithm working on video from duckietown server: https://youtu.be/Ve79IPrYC6c
 
-Model makes base prediction -- next tile class. Also, we print second-prioritized predicted class, cause our dataset not balanced && trained mostly on "straight line" tiles. 
+Model makes base prediction -- next tile class (on the left of "/"). Also, we print second-prioritized predicted class, cause our dataset not balanced && trained mostly on "straight line" tiles (on the right of "/"). 
 
 ![](./demo/demo_marked.gif)
 
