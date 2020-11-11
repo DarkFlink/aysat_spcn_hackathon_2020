@@ -13,7 +13,6 @@ python3 predict_roadtype.py -i ./video.mp4 -o ./out.mp4 --canny --cpu
 -o -- path output video
 --canny -- outout video processed with canny
 --cpu -- take cpu-trained model
---gpu -- take gpu-trained model
 ```
 
 
