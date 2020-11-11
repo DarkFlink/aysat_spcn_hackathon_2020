@@ -1,8 +1,20 @@
-# spcn_hackathon_2020
+# DuckieRoadNet
+
+## Solvation
+
+
+
 
 ## Run
 
-
+```
+python3 predict_roadtype -i ./video.mp4 -o ./out.mp4 --canny --cpu
+-i -- path input
+-o -- path output video
+--canny -- outout video processed with canny
+--cpu -- take cpu-trained model
+--gpu -- take gpu-trained model
+```
 
 
 ## Additional
