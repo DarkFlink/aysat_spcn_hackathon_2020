@@ -8,9 +8,9 @@ from torch.optim import Adam
 from utils import get_train_x_y
 from sklearn.model_selection import train_test_split
 
-epochs = 15
-batch_size = 24
-learn_rate = 0.001
+epochs = 20
+batch_size = 20
+learn_rate = 0.1
 num_classes = 6
 tiles = {"right":0, "left":1, "straight":2, "three_cross":3, "four_cross":4, "empty":5}
 
@@ -51,21 +51,27 @@ class RoadNet(nn.Module):
         self.relu1 = nn.ReLU()
         self.batn1 = nn.BatchNorm2d(8)
         self.pool1 = nn.MaxPool2d(kernel_size=2)
-        self.drop1 = nn.Dropout(p=0.2)
+        self.drop1 = nn.Dropout(p=0.1)
 
         self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1)
         self.relu2 = nn.ReLU()
         self.batn2 = nn.BatchNorm2d(16)
         self.pool2 = nn.MaxPool2d(kernel_size=2)
-        self.drop2 = nn.Dropout(p=0.2)
+        self.drop2 = nn.Dropout(p=0.1)
 
         self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
         self.relu3 = nn.ReLU()
         self.batn3 = nn.BatchNorm2d(32)
         self.pool3 = nn.MaxPool2d(kernel_size=2)
-        self.drop3 = nn.Dropout(p=0.2)
+        self.drop3 = nn.Dropout(p=0.1)
 
-        self.fc = nn.Linear(in_features=28 * 28 * 32, out_features=6)
+        self.conv4 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
+        self.relu4 = nn.ReLU()
+        self.batn4 = nn.BatchNorm2d(64)
+        self.pool4 = nn.MaxPool2d(kernel_size=2)
+        self.drop4 = nn.Dropout(p=0.1)
+
+        self.fc = nn.Linear(in_features=14 * 14 * 64, out_features=6)
 
     def forward(self, input):
       #  print(input.shape)
@@ -87,7 +93,13 @@ class RoadNet(nn.Module):
         output = self.pool3(output)
         output = self.drop3(output)
 
-        output = output.view(-1, 28 * 28 * 32)
+        output = self.conv4(output)
+        output = self.relu4(output)
+        output = self.batn4(output)
+        output = self.pool4(output)
+        output = self.drop4(output)
+
+        output = output.view(-1, 14 * 14 * 64)
         output = self.fc(output)
 
         return output
@@ -98,8 +110,8 @@ opt = Adam(classifier.parameters(), lr=learn_rate)
 
 x_data, y_data = get_train_x_y('./data')
 x_data = x_data / 255.0
-#x_data = x_data[:250]
-#y_data = y_data[:250]
+#x_data = x_data[400:600]
+#y_data = y_data[400:600]
 y_data = [tiles[i] for i in y_data]
 
 train_X, test_X, train_Y, test_Y = train_test_split(x_data, y_data, test_size=0.2)
