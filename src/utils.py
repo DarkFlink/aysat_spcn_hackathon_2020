@@ -112,7 +112,7 @@ def preproc(src_img):
     img = cv2.medianBlur(img, 5)
     #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     canny = cv2.Canny(img,100,200)
-    return canny
+    return np.asarray(canny)
 
 
 def load_images(path = './data'):
