@@ -6,7 +6,7 @@ import numpy as np
 from src.models.roadnet import RoadNet
 
 cpu_model = './pretrained_model/model_cpu.pt'
-gpu_model = './model.pt'
+gpu_model = './pretrained_model/model_gpu.pt'#'./model.pt'
 
 tiles = {0:"right", 1:"left", 2:"straight", 3:"three_cross", 4:"four_cross", 5:"empty"}
 parser = ArgumentParser()
@@ -56,10 +56,10 @@ def get_avi(path_to_video, output_file,save_gray= False, cpu = False):
         pred = get_class(max1) + '/' + get_class(max2)
         if save_gray:
             gray_three = cv2.merge(preproc_frame)
-            cv2.putText(gray_three, pred, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 1, cv2.LINE_AA)
+            cv2.putText(gray_three, pred, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
             result_frame_array.append(gray_three)
         else:
-            cv2.putText(frame, pred, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 1, cv2.LINE_AA)
+            cv2.putText(frame, pred, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
             result_frame_array.append(frame)
 
     cap.release()
