@@ -169,17 +169,29 @@ def get_class(number):
     return tiles[number]
 
 
-def get_avi(input_dir, output_file):
-    img_array = []
-    for filename in glob.glob(input_dir):
-        img = cv2.imread(filename)
-        cv2.putText(img, get_class(3), (100, 25), cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 2, cv2.LINE_AA)
-        height, width, layers = img.shape
-        size = (width, height)
-        img_array.append(img)
-
-    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 2, size)
-
-    for i in range(len(img_array)):
-        out.write(img_array[i])
+def get_avi(path_to_video,output_file,save_gray= False):
+    cap = cv2.VideoCapture(path_to_video)
+    result_frame_array = []
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            #print("Can't receive frame (stream end?). Exiting ...")
+            cv2.destroyAllWindows()
+            break
+        #predict function need to be here
+        preproc_frame = preproc(frame)
+        if save_gray:
+            gray_three = cv2.merge([preproc_frame, preproc_frame, preproc_frame])
+            cv2.putText(gray_three, get_class(3), (100, 25), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2, cv2.LINE_AA)
+            result_frame_array.append(gray_three)
+        else:
+            cv2.putText(frame, get_class(3), (100, 25), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 2, cv2.LINE_AA)
+            result_frame_array.append(frame)
+        if cv2.waitKey(1) == ord('q'):
+            break
+    cap.release()
+    height, width, layers = result_frame_array[0].shape
+    out = cv2.VideoWriter(output_file, cv2.VideoWriter_fourcc(*'DIVX'), 5, (width,height))
+    for i in result_frame_array:
+        out.write(i)
     out.release()
