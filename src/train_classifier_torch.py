@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader, Dataset
 from torch.optim import Adam
 from src.utils import get_train_x_y
 from sklearn.model_selection import train_test_split
+from src.models.roadnet import RoadNet
 
 epochs = 30
 batch_size = 20

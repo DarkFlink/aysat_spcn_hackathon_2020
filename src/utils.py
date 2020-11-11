@@ -161,7 +161,7 @@ def get_train_x_y(_dir_path='./data'):
                 y_data.append(label)
              #   img = PIL.Image.open(key)
              #   x_data.append(np.asarray(img))
-                x_data.append(np.asarray(load_images_from_path([key])[0]))
+                x_data.append(np.asarray(load_images_from_path(['.'+key])[0]))
     return np.asarray(x_data), np.asarray(y_data)
 
 
